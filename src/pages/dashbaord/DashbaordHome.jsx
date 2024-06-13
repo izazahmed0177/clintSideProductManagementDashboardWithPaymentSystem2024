@@ -3,7 +3,7 @@
 export default function DashbaordHome() {
   return (
     <div>
-      
+      dashbord
     </div>
   )
 }

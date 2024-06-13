@@ -1,6 +1,7 @@
 // import React from 'react'
 
 import { Outlet } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 export default function DashbaordLayouts() {
   return (
@@ -19,7 +20,8 @@ export default function DashbaordLayouts() {
         <div className="flex flex-col flex-1 overflow-y-auto">
 
             <nav className="flex-1 px-2 py-4 bg-gray-800">
-                <a href="#" className="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700">
+
+                <NavLink to={"/dashboard"} className="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700">
 
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -36,8 +38,8 @@ export default function DashbaordLayouts() {
 
 
                     Dashboard Home
-                </a>
-                <a href="#" className="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700">
+                </NavLink>
+                <NavLink to={"/dashboard/dashboardMyProduct"} className="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700">
                     <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 mr-2"
@@ -52,9 +54,11 @@ export default function DashbaordLayouts() {
                 />
               </svg>
                   MY Product
-                </a>
-                <a
-              href="#"
+                </NavLink>
+
+
+                <NavLink
+              to={"/dashboard/addproduct"}
               className="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700"
             >
               <svg
@@ -72,10 +76,10 @@ export default function DashbaordLayouts() {
               </svg>
 
               Add Product
-            </a>
+            </NavLink>
 
-            <a
-              href="#"
+            <NavLink
+              to={"/dashboard/profile"}
               className="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700"
             >
               <svg
@@ -93,10 +97,10 @@ export default function DashbaordLayouts() {
               </svg>
 
               Profile
-            </a>
+            </NavLink>
 
-            <a
-              href="#"
+            <NavLink
+              to={"/dashboard/profileedit"}
               className="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700"
             >
             
@@ -119,7 +123,7 @@ export default function DashbaordLayouts() {
 
 
              Profile Settings
-            </a>
+            </NavLink>
                 
                 
             </nav>

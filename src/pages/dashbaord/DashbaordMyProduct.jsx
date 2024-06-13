@@ -3,7 +3,7 @@
 export default function DashbaordMyProduct() {
   return (
     <div>
-      
+      mypro
     </div>
   )
 }
