@@ -2,9 +2,46 @@
 
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import auth from "../../firebase/firebase.config";
+import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
+import toast from "react-hot-toast";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
+    const [user] = useAuthState(auth);
+  
+    const [signOut] = useSignOut(auth);
+
+
+
+    const handleSignout = async()=>{
+
+
+      const success=await signOut()
+      if (success) {
+        // alert("You are sign out!!")
+        // localStorage.clear();
+        // Swal.fire({
+        //   position: "top-end",
+        //   icon: "success",
+        //   title: "You are sign out!!",
+        //   showConfirmButton: false,
+        //   timer: 1500
+        // });
+  
+  
+  
+        toast.success("You Are Log Out")
+        // navigate(from);
+        // reload()
+        
+      }
+  }
+
+
+
   return (
     <div className="bg-gray-900">
       <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
@@ -104,7 +141,10 @@ export default function Navbar() {
 
           </ul> */}
 
-             <div className="flex gap-3">
+          {
+            !user?.email  ? 
+            <>
+            <div className="flex gap-3">
                     <button>
               <NavLink
                 to={"login"}
@@ -129,6 +169,76 @@ export default function Navbar() {
 
                     </div>
 
+            </>
+            :
+            <>
+
+            <div className="flex gap-3">
+                    <button>
+              <NavLink
+                to={"dashboard"}
+                className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+               
+              >
+                Dashboard
+              </NavLink>
+            </button>
+
+            <button>
+              <button
+              onClick={handleSignout}
+                to={""}
+                className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+                
+              >
+                Log Out
+              </button>
+            </button>
+
+            <div className="avatar online">
+                <div className="w-20 rounded-full">
+                     {/* <img src={user?.photoURL} /> */}
+                     
+
+
+                     {
+              !user?.image ?
+              <>
+              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+
+              </>
+              :
+              <>
+              <img src={user?.image} />
+
+              </>
+            }
+
+
+
+
+                </div>
+              </div>
+
+
+
+
+
+
+                    </div>
+
+
+
+
+
+            </>
+          }
+
+
+
+
+            
+
 
 
 
@@ -136,12 +246,14 @@ export default function Navbar() {
 
 
           <div className="lg:hidden">
+
             <button
               aria-label="Open Menu"
               title="Open Menu"
               className="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline"
               onClick={() => setIsMenuOpen(true)}
             >
+
               <svg className="w-5 text-gray-600" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
@@ -188,6 +300,8 @@ export default function Navbar() {
                         </span>
                       </a>
                     </div>
+
+
                     <div>
                       <button
                         aria-label="Close Menu"
@@ -204,12 +318,8 @@ export default function Navbar() {
                       </button>
                     </div>
                   </div>
+                  
                   <nav>
-
-
-
-
-
 
                     <ul className="space-y-4">
                       <li>
@@ -254,49 +364,7 @@ export default function Navbar() {
                       </li>
 
 
-                  
-
-
-
-
-
                     </ul>
-
-
-                    <div className="flex gap-3">
-                    <button>
-              <NavLink
-                to={"login"}
-                className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                aria-label="Sign up"
-                title="Sign up"
-              >
-                Log in
-              </NavLink>
-            </button>
-
-            <button>
-              <NavLink
-                to={"register"}
-                className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                aria-label="Sign up"
-                title="Sign up"
-              >
-                Sign up
-              </NavLink>
-            </button>
-
-                    </div>
-
-
-
-
-
-
-
-
-
-
                   </nav>
                 </div>
               </div>

@@ -15,6 +15,7 @@ import EditProduct from "../pages/dashbaord/EditProduct";
 import Profile from './../components/user/Profile';
 import ProfileEdit from './../components/user/ProfileEdit';
 import DashbaordLayouts from "../layouts/DashbaordLayouts";
+import PrivateRouter from "./PrivateRouter";
 
 
 const router=createBrowserRouter([
@@ -50,7 +51,11 @@ const router=createBrowserRouter([
 
   {
     path:"dashboard",
-    element:<DashbaordLayouts></DashbaordLayouts>,
+    element:(
+      <PrivateRouter>
+        <DashbaordLayouts></DashbaordLayouts>
+      </PrivateRouter>
+    ),
     errorElement:<ErrorPage></ErrorPage>,
     children:[
       {
