@@ -1,7 +1,9 @@
 // import React from 'react'
 
+import axios from "axios";
 import auth from "../../firebase/firebase.config";
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import Swal from "sweetalert2";
 
 export default function GoogleLogin() {
 
@@ -11,7 +13,7 @@ export default function GoogleLogin() {
 
   const handleGoogleLogin=()=>{
 
-      // const token=localStorage.getItem('token')
+      const token=localStorage.getItem('token')
 
 
 
@@ -19,25 +21,25 @@ export default function GoogleLogin() {
           const user=result.user;
           console.log(user);
 
-          // const userinfo={
-          //     fullName:user.displayName,
-          //     email:user.email,
-          //     image:user.photoURL
-          // }
+          const userinfo={
+              fullName:user.displayName,
+              email:user.email,
+              image:user.photoURL
+          }
 
-          // const headers = {
-          //     'Content-Type': 'application/json',
-          //     'Authorization': `Bearer ${token}`
-          //   }
+          const headers = {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
 
 
 
-        //   axios.post("https://cosmeticszoneserver2024.onrender.com/user",userinfo,{
-        //       headers:headers
-        //   }).then((data)=>{
-        //       localStorage.setItem('token',data?.data?.token)
+          axios.post("http://localhost:5000/user",userinfo,{
+              headers:headers
+          }).then((data)=>{
+              localStorage.setItem('token',data?.data?.token)
           
-        // })
+        })
 
 
 
@@ -46,13 +48,13 @@ export default function GoogleLogin() {
 
 
 
-      // Swal.fire({
-      //   position: "top-end",
-      //   icon: "success",
-      //   title: "Login Successfully",
-      //   showConfirmButton: false,
-      //   timer: 1500
-      // });
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Login Successfully",
+        showConfirmButton: false,
+        timer: 1500
+      });
     
     }
   

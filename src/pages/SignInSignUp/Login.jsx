@@ -6,6 +6,7 @@ import auth from "../../firebase/firebase.config";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function Login() {
 
@@ -23,7 +24,7 @@ export default function Login() {
 
       
     const handleSignIn = (e) => {
-      // const token=localStorage.getItem('token')
+      const token=localStorage.getItem('token')
       e.preventDefault();
   
       const form = e.target;
@@ -35,20 +36,20 @@ export default function Login() {
         console.log(user);
 
 
-    //     const curentUser={
-    //       email:user.email
-    //     }
+        const curentUser={
+          email:user.email
+        }
 
-    //     const headers = {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${token}`
-    //     }
-    //   axios.post("https://cosmeticszoneserver2024.onrender.com/user",curentUser,{
-    //       headers:headers
-    //   }).then((data)=>{
-    //       localStorage.setItem('token',data?.data?.token)
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      axios.post("http://localhost:5000/user",curentUser,{
+          headers:headers
+      }).then((data)=>{
+          localStorage.setItem('token',data?.data?.token)
       
-    // })
+    })
 
 
 

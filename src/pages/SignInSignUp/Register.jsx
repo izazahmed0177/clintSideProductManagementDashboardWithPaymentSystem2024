@@ -6,6 +6,7 @@ import auth from "../../firebase/firebase.config";
 import { useAuthState, useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 function Register() {
 
@@ -27,12 +28,12 @@ function Register() {
 
 
 
-  // const [userInfoDb,setUserInfo]=useState({});
+  const [userInfoDb,setUserInfo]=useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // const token=localStorage.getItem('token')
+    const token=localStorage.getItem('token')
 
     const form = e.target;
     const email = form.email.value;
@@ -40,18 +41,18 @@ function Register() {
     const confirmPassword = form.confirmPassword.value;
 
  
-    const name=form.name.value;
+    const fullName=form.fullName.value;
 
-    console.log(email, password, confirmPassword,name);
+    console.log(email, password, confirmPassword,fullName);
 
 
-    // function getUserDb(email) {
-    //    fetch(`https://cosmeticszoneserver2024.onrender.com/user/${email}`)
-    //   .then((res)=>res.json())
-    //   .then((data)=>setUserInfo(data))
+    function getUserDb(email) {
+       fetch(`http://localhost:5000/user/${email}`)
+      .then((res)=>res.json())
+      .then((data)=>setUserInfo(data))
       
-    // }
-    // getUserDb(email)
+    }
+    getUserDb(email)
 
 
     
@@ -60,10 +61,10 @@ function Register() {
 
 
 
-    // if (email===userInfoDb.email) {
-    //   console.log("Älrady user");
-    //   toast.error(" Alrady exjist user")
-    // }
+    if (email===userInfoDb.email) {
+      console.log("Älrady user");
+      toast.error(" Alrady exjist user")
+    }
 
 
 
@@ -74,31 +75,30 @@ function Register() {
 
     console.log(email, password, confirmPassword);
 
-    // if (password === confirmPassword && email!==userInfoDb.email) {
-    if (password === confirmPassword ) {
+    if (password === confirmPassword && email!==userInfoDb.email) {
 
 
       createUserWithEmailAndPassword(email, password).then((data)=>{
         if (data?.user?.email) {
 
 
-          // const userInfo = {
-          //   email: data?.user?.email,
-          //   fullName:fullName,
+          const userInfo = {
+            email: data?.user?.email,
+            fullName:fullName,
            
-          // };
+          };
 
-          // const headers = {
-          //   'Content-Type': 'application/json',
-          //   'Authorization': `Bearer ${token}`
-          // }
+          const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
 
-          // axios.post("https://cosmeticszoneserver2024.onrender.com/user",userInfo,{
-          //   headers: headers
+          axios.post("http://localhost:5000/user",userInfo,{
+            headers: headers
 
-          // }).then(()=>{
+          }).then(()=>{
             
-          // })
+          })
           navigate(from);
 
 
@@ -128,7 +128,7 @@ function Register() {
       console.log(error?.message);
       toast.error(" Alrady exjist user")
     }
-  }, [navigate,  error]);
+  }, [navigate, userInfo, error]);
 
   console.log(user, loading);
 
@@ -156,7 +156,7 @@ function Register() {
                   <div className="relative">
                     <input
                       id="name"
-                      name="name"
+                      name="fullName"
                       type="text"
                       className="px-2 peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
                       placeholder="Full Name"
@@ -212,11 +212,6 @@ function Register() {
                 )}
 
                 {error && <p className="text-red-800">{error?.message}</p>}
-
-
-
-
-
 
                   <div className="relative">
                     <button className="bg-cyan-500 text-white rounded-md px-2 py-1">

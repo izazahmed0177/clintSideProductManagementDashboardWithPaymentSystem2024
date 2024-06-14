@@ -16,6 +16,8 @@ import Profile from './../components/user/Profile';
 import ProfileEdit from './../components/user/ProfileEdit';
 import DashbaordLayouts from "../layouts/DashbaordLayouts";
 import PrivateRouter from "./PrivateRouter";
+import HomeProduct from "../pages/otherPage/HomeProduct";
+import DetailProductHomeCard from "../components/cards/DetailProductHomeCard";
 
 
 const router=createBrowserRouter([
@@ -37,6 +39,19 @@ const router=createBrowserRouter([
         path:"contact",
         element:<Contact></Contact>
       },
+      {
+        path:"allProduct",
+        element:<HomeProduct></HomeProduct>
+      },
+      {
+        path:"details/:id",
+        element:<DetailProductHomeCard/>,
+        loader:({params})=>fetch(`http://localhost:5000/product/get/${params.id}`)
+    },
+
+
+
+
       {
         path:"login",
         element:<Login></Login>

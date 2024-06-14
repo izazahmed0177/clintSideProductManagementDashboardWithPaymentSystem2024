@@ -1,18 +1,44 @@
 // import React from 'react'
 
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase/firebase.config";
 import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import { reload } from "firebase/auth";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    
+    const navigate = useNavigate();
+    const location = useLocation();
+  
+    const from = location?.state?.from?.pathname || "/login";
 
 
     const [user] = useAuthState(auth);
   
     const [signOut] = useSignOut(auth);
+
+    const [userInfoDb,setUserInfo]=useState({});
+
+    useEffect(()=>{
+
+      
+      fetch(`http://localhost:5000/user/${user?.email}`)
+      .then((res)=>res.json())
+      .then((data)=>setUserInfo(data))
+      
+    },[user,userInfoDb,signOut,])
+
+  
+
+
+
+    console.log(user);
+    console.log(userInfoDb);
 
 
 
@@ -21,21 +47,21 @@ export default function Navbar() {
 
       const success=await signOut()
       if (success) {
-        // alert("You are sign out!!")
-        // localStorage.clear();
-        // Swal.fire({
-        //   position: "top-end",
-        //   icon: "success",
-        //   title: "You are sign out!!",
-        //   showConfirmButton: false,
-        //   timer: 1500
-        // });
+        alert("You are sign out!!")
+        localStorage.clear();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "You are sign out!!",
+          showConfirmButton: false,
+          timer: 1500
+        });
   
   
   
         toast.success("You Are Log Out")
-        // navigate(from);
-        // reload()
+        navigate(from);
+        reload()
         
       }
   }
@@ -73,14 +99,14 @@ export default function Navbar() {
           </a>
           <ul className="flex items-center hidden space-x-8 lg:flex">
             <li>
-              <a
-                href="/"
+              <NavLink
+                to={"allProduct"}
                 aria-label="Our product"
                 title="Our product"
                 className="font-medium tracking-wide text-gray-100 transition-colors duration-200 hover:text-teal-accent-400"
               >
-                Product
-              </a>
+                All Product
+              </NavLink>
             </li>
             <li>
               <a
@@ -114,32 +140,6 @@ export default function Navbar() {
             </li>
           </ul>
 
-
-
-          {/* <ul className="flex items-center hidden space-x-8 lg:flex">
-            <li>
-              <NavLink
-                to={"login"}
-                className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                aria-label="Sign up"
-                title="Sign up"
-              >
-                Log in
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to={"register"}
-                className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                aria-label="Sign up"
-                title="Sign up"
-              >
-                Sign up
-              </NavLink>
-            </li>
-
-
-          </ul> */}
 
           {
             !user?.email  ? 
@@ -202,14 +202,14 @@ export default function Navbar() {
 
 
                      {
-              !user?.image ?
+              !userInfoDb?.image ?
               <>
               <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
 
               </>
               :
               <>
-              <img src={user?.image} />
+              <img src={userInfoDb?.image} />
 
               </>
             }
@@ -323,14 +323,14 @@ export default function Navbar() {
 
                     <ul className="space-y-4">
                       <li>
-                        <a
-                          href="/"
+                        <NavLink
+                          to={"allProduct"}
                           aria-label="Our product"
                           title="Our product"
                           className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
                         >
-                          Product
-                        </a>
+                         All Product
+                        </NavLink>
                       </li>
                       <li>
                         <a
