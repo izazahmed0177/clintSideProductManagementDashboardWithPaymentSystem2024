@@ -18,6 +18,7 @@ import DashbaordLayouts from "../layouts/DashbaordLayouts";
 import PrivateRouter from "./PrivateRouter";
 import HomeProduct from "../pages/otherPage/HomeProduct";
 import DetailProductHomeCard from "../components/cards/DetailProductHomeCard";
+import DashbordDetailProduct from "../pages/dashbaord/DashbordDetailProduct";
 
 
 const router=createBrowserRouter([
@@ -88,9 +89,17 @@ const router=createBrowserRouter([
         element:<DashbaordMyProduct></DashbaordMyProduct>
       },
       {
-        path:"editproduct",
+        path:"editproduct/:id",
         element:<EditProduct></EditProduct>
       },
+      {
+        path:"dashboardMyProduct/dashbordDetailProduct/:id",
+        element:<DashbordDetailProduct/>,
+        loader:({params})=>fetch(`http://localhost:5000/product/get/${params.id}`)
+    },
+
+
+
       {
         path:"profile",
         element:<Profile></Profile>
