@@ -8,65 +8,50 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { reload } from "firebase/auth";
 
+import { FaShoppingCart } from "react-icons/fa";
+
+
 export default function Navbar() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    
-    const navigate = useNavigate();
-    const location = useLocation();
-  
-    const from = location?.state?.from?.pathname || "/login";
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  const from = location?.state?.from?.pathname || "/login";
 
-    const [user] = useAuthState(auth);
-  
-    const [signOut] = useSignOut(auth);
+  const [user] = useAuthState(auth);
 
-    const [userInfoDb,setUserInfo]=useState({});
+  const [signOut] = useSignOut(auth);
 
-    useEffect(()=>{
+  const [userInfoDb, setUserInfo] = useState({});
 
-      
-      fetch(`http://localhost:5000/user/${user?.email}`)
-      .then((res)=>res.json())
-      .then((data)=>setUserInfo(data))
-      
-    },[user,userInfoDb,signOut,])
+  useEffect(() => {
+    fetch(`http://localhost:5000/user/${user?.email}`)
+      .then((res) => res.json())
+      .then((data) => setUserInfo(data));
+  }, [user, userInfoDb, signOut]);
 
-  
+  // console.log(user);
+  // console.log(userInfoDb);
 
+  const handleSignout = async () => {
+    const success = await signOut();
+    if (success) {
+      alert("You are sign out!!");
+      localStorage.clear();
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "You are sign out!!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
-
-    console.log(user);
-    console.log(userInfoDb);
-
-
-
-    const handleSignout = async()=>{
-
-
-      const success=await signOut()
-      if (success) {
-        alert("You are sign out!!")
-        localStorage.clear();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "You are sign out!!",
-          showConfirmButton: false,
-          timer: 1500
-        });
-  
-  
-  
-        toast.success("You Are Log Out")
-        navigate(from);
-        reload()
-        
-      }
-  }
-
-
+      toast.success("You Are Log Out");
+      navigate(from);
+      reload();
+    }
+  };
 
   return (
     <div className="bg-gray-900">
@@ -128,6 +113,7 @@ export default function Navbar() {
                 Pricing
               </a>
             </li>
+
             <li>
               <a
                 href="/"
@@ -138,122 +124,89 @@ export default function Navbar() {
                 About us
               </a>
             </li>
+            <NavLink>
+              <button className="btn">
+              <FaShoppingCart />
+
+                <div className="badge badge-secondary">+0</div>
+              </button>
+            </NavLink>
           </ul>
 
-
-          {
-            !user?.email  ? 
+          {!user?.email ? (
             <>
-            <div className="flex gap-3">
-                    <button>
-              <NavLink
-                to={"login"}
-                className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                aria-label="Sign up"
-                title="Sign up"
-              >
-                Log in
-              </NavLink>
-            </button>
+              <div className="flex gap-3">
+                <button>
+                  <NavLink
+                    to={"login"}
+                    className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+                    aria-label="Sign up"
+                    title="Sign up"
+                  >
+                    Log in
+                  </NavLink>
+                </button>
 
-            <button>
-              <NavLink
-                to={"register"}
-                className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                aria-label="Sign up"
-                title="Sign up"
-              >
-                Sign up
-              </NavLink>
-            </button>
-
-                    </div>
-
+                <button>
+                  <NavLink
+                    to={"register"}
+                    className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+                    aria-label="Sign up"
+                    title="Sign up"
+                  >
+                    Sign up
+                  </NavLink>
+                </button>
+              </div>
             </>
-            :
+          ) : (
             <>
+              <div className="flex gap-3">
+                <button>
+                  <NavLink
+                    to={"dashboard"}
+                    className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+                  >
+                    Dashboard
+                  </NavLink>
+                </button>
 
-            <div className="flex gap-3">
-                    <button>
-              <NavLink
-                to={"dashboard"}
-                className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-               
-              >
-                Dashboard
-              </NavLink>
-            </button>
+                <button>
+                  <button
+                    onClick={handleSignout}
+                    to={""}
+                    className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+                  >
+                    Log Out
+                  </button>
+                </button>
 
-            <button>
-              <button
-              onClick={handleSignout}
-                to={""}
-                className=" btn inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-black transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                
-              >
-                Log Out
-              </button>
-            </button>
+                <div className="avatar online">
+                  <div className="w-20 rounded-full">
+                    {/* <img src={user?.photoURL} /> */}
 
-            <div className="avatar online">
-                <div className="w-20 rounded-full">
-                     {/* <img src={user?.photoURL} /> */}
-                     
-
-
-                     {
-              !userInfoDb?.image ?
-              <>
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-
-              </>
-              :
-              <>
-              <img src={userInfoDb?.image} />
-
-              </>
-            }
-
-
-
-
+                    {!userInfoDb?.image ? (
+                      <>
+                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                      </>
+                    ) : (
+                      <>
+                        <img src={userInfoDb?.image} />
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-
-
-
-
-
-
-                    </div>
-
-
-
-
-
             </>
-          }
-
-
-
-
-            
-
-
-
-
-
-
+          )}
 
           <div className="lg:hidden">
-
             <button
               aria-label="Open Menu"
               title="Open Menu"
               className="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline"
               onClick={() => setIsMenuOpen(true)}
             >
-
               <svg className="w-5 text-gray-600" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
@@ -301,7 +254,6 @@ export default function Navbar() {
                       </a>
                     </div>
 
-
                     <div>
                       <button
                         aria-label="Close Menu"
@@ -318,9 +270,8 @@ export default function Navbar() {
                       </button>
                     </div>
                   </div>
-                  
-                  <nav>
 
+                  <nav>
                     <ul className="space-y-4">
                       <li>
                         <NavLink
@@ -329,7 +280,7 @@ export default function Navbar() {
                           title="Our product"
                           className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
                         >
-                         All Product
+                          All Product
                         </NavLink>
                       </li>
                       <li>
@@ -362,18 +313,21 @@ export default function Navbar() {
                           About us
                         </a>
                       </li>
+                      <NavLink>
+                        <button className="btn">
+                        <FaShoppingCart />
 
-
+                          <div className="badge badge-secondary">+99</div>
+                        </button>
+                      </NavLink>
                     </ul>
                   </nav>
                 </div>
               </div>
             )}
           </div>
-
-          
         </div>
       </div>
     </div>
-  )
+  );
 }

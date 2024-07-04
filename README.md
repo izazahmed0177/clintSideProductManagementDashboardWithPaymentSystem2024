@@ -14,3 +14,17 @@ degine tailwind css
 premnt system
 
 [Stripe.js](https://docs.stripe.com/stripe-js/react)
+
+
+use 
+
+[swiperjs.com](https://swiperjs.com/demos#centered)
+
+[react icons](https://www.npmjs.com/package/react-icons)
+[react icons](https://react-icons.github.io/react-icons/)
+
+
+
+data fatch
+
+[tanstack query](https://tanstack.com/query/latest)
