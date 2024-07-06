@@ -28,3 +28,7 @@ use
 data fatch
 
 [tanstack query](https://tanstack.com/query/latest)
+
+
+[tanstack query](https://tanstack.com/query/latest/docs/framework/react/installation)
+

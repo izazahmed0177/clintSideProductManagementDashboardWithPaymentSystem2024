@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { reload } from "firebase/auth";
 
 import { FaShoppingCart } from "react-icons/fa";
+import useCart from "../hook/useCart";
 
 
 export default function Navbar() {
@@ -16,6 +17,11 @@ export default function Navbar() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [cart]=useCart()
+
+
+
 
   const from = location?.state?.from?.pathname || "/login";
 
@@ -128,7 +134,7 @@ export default function Navbar() {
               <button className="btn">
               <FaShoppingCart />
 
-                <div className="badge badge-secondary">+0</div>
+                <div className="badge badge-secondary">+{cart.length}</div>
               </button>
             </NavLink>
           </ul>
@@ -317,7 +323,7 @@ export default function Navbar() {
                         <button className="btn">
                         <FaShoppingCart />
 
-                          <div className="badge badge-secondary">+99</div>
+                          <div className="badge badge-secondary">+{cart.length}</div>
                         </button>
                       </NavLink>
                     </ul>
