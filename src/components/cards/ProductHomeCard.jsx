@@ -2,20 +2,49 @@
 // import React from 'react'
 
 import { useAuthState } from "react-firebase-hooks/auth";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase/firebase.config";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../hook/useAxiosSecure";
 
 export default function ProductHomeCard({ product }) {
 
-  const navigate=useNavigate()
+  const navigate=useNavigate();
+  const location=useLocation();
 
   const [user] = useAuthState(auth);
+
+  const axiosSecure=useAxiosSecure();
 
   const handalAddtoCart=(char)=>{
     // console.log(char,user.email);
 
     if (user && user.email) {
+      console.log(char,user.email);
+      const cartItem={
+        charId:char?._id,
+        costomarEmail:user?.email,
+        name:char?.productName,
+        price:char?.price,
+        stock:char?.stock,
+        title:char?.title,
+        image:char?.image
+
+      }
+      axiosSecure.post('/carts',cartItem)
+      .then(res=>{
+        console.log(res.data)
+        if (res.data.insertedId) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            // title: `${name} add to card`,
+            title: ` add to card`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      })
       
     } else {
 
@@ -29,7 +58,7 @@ export default function ProductHomeCard({ product }) {
         confirmButtonText: "Yes, login!"
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate('/login')
+          navigate('/login',{state:{from:location}})
         }
       });
       
