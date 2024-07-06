@@ -1,12 +1,41 @@
 /* eslint-disable react/prop-types */
 // import React from 'react'
 
-import { NavLink } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { NavLink, useNavigate } from "react-router-dom";
+import auth from "../../firebase/firebase.config";
+import Swal from "sweetalert2";
 
 export default function ProductHomeCard({ product }) {
 
+  const navigate=useNavigate()
+
+  const [user] = useAuthState(auth);
+
   const handalAddtoCart=(char)=>{
-    console.log(char);
+    // console.log(char,user.email);
+
+    if (user && user.email) {
+      
+    } else {
+
+      Swal.fire({
+        title: "You are not login",
+        text: "Please login to add to the card",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, login!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login')
+        }
+      });
+      
+    }
+
+
 
   }
 
